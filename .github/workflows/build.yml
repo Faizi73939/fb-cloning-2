@@ -8,40 +8,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1. Java Setup (Required for Android signing)
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 2. Setup Flutter (Engine for Flet)
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
-      # 3. Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      # 4. Install Flet Build Tool
       - name: Install Flet
         run: |
-          pip install flet
+          pip install flet requests urllib3 certifi
           flutter config --no-analytics
 
-      # 5. Build APK (With Custom Name and Package)
+      # IDHAR DEKHO: Humne --icon flag add kiya hai
       - name: Build APK
         run: |
-          # --product sets the APK Name
-          # --org + name sets the Package Name (com.unbanbyfaizi)
-          yes | flet build apk --project "whatsapp_unban" --org "com" --product "Whatsapp Unban" --verbose
+          yes | flet build apk --project "whatsapp_unban" --org "com" --product "Whatsapp Unban" --release --icon "icon.png"
 
-      # 6. Upload Resulting APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
