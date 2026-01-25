@@ -27,13 +27,21 @@ jobs:
 
       - name: Install Flet
         run: |
-          pip install flet requests urllib3 certifi
+          # Flet ko latest version par upgrade karenge taake flags pehchan sakay
+          pip install --upgrade flet requests urllib3 certifi
           flutter config --no-analytics
 
-      # IDHAR DEKHO: Humne --icon flag add kiya hai
-      - name: Build APK
+      - name: Build APK (Stable Command)
         run: |
-          yes | flet build apk --project "whatsapp_unban" --org "com" --product "Whatsapp Unban" --release --icon "icon.png"
+          # Sequence change kiya hai: flags se pehle APK aur project name
+          # Agar 'icon.png' folder mein hai toh ye khud utha lega
+          yes | flet build apk --project "whatsapp_unban" --org "com" --product "Whatsapp Unban"
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Whatsapp-Unban-Tool
+          path: build/apk/app-release.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
