@@ -1,4 +1,4 @@
-name: Faizi Unban Final Build
+name: Faizi Unban Final Stable
 on: [push, workflow_dispatch]
 
 jobs:
@@ -27,24 +27,19 @@ jobs:
 
       - name: Install Flet
         run: |
-          # Flet ko latest version par upgrade karenge taake flags pehchan sakay
-          pip install --upgrade flet requests urllib3 certifi
+          pip install flet requests urllib3 certifi
           flutter config --no-analytics
 
-      - name: Build APK (Stable Command)
+      - name: Build APK
         run: |
-          # Sequence change kiya hai: flags se pehle APK aur project name
-          # Agar 'icon.png' folder mein hai toh ye khud utha lega
+          # Flet command for custom name and package
           yes | flet build apk --project "whatsapp_unban" --org "com" --product "Whatsapp Unban"
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Whatsapp-Unban-Tool
+          # Name change kiya hai taake conflict na ho
+          name: Whatsapp-Unban-Final-V2
           path: build/apk/app-release.apk
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Whatsapp-Unban-Tool
-          path: build/apk/app-release.apk
+          # Purani file ko overwrite karne ke liye:
+          overwrite: true
