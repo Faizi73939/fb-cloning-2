@@ -1,0 +1,49 @@
+name: Faizi Unban Final Build
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Java Setup (Required for Android signing)
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 2. Setup Flutter (Engine for Flet)
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # 3. Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 4. Install Flet Build Tool
+      - name: Install Flet
+        run: |
+          pip install flet
+          flutter config --no-analytics
+
+      # 5. Build APK (With Custom Name and Package)
+      - name: Build APK
+        run: |
+          # --product sets the APK Name
+          # --org + name sets the Package Name (com.unbanbyfaizi)
+          yes | flet build apk --project "whatsapp_unban" --org "com" --product "Whatsapp Unban" --verbose
+
+      # 6. Upload Resulting APK
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Whatsapp-Unban-Tool
+          path: build/apk/app-release.apk
