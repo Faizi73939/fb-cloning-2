@@ -1,6 +1,8 @@
 {
   "approved_keys": [
 
+FAIZI-KEY-O3MCFE-RNGGH-I53S0W-G7WK6W
+
 
 
 
